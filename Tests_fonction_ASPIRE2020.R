@@ -1,18 +1,6 @@
----
-title: "Tests fonctions ASPIRE 2020"
-date: "`r format(Sys.time(), '%d %B %Y')`"
-output: 
-  html_document: 
-    toc: yes
-editor_options: 
-  chunk_output_type: console
----
+library(knitr)
+purl(input = "Tests_fonction_ASPIRE2020.Rmd", output = "Tests_fonction_ASPIRE2020.R", documentation = 2)
 
-## 1. `Transf_ASPIRE` $\sqrt{}$
-
-La fonction :
-
-```{r}
 #' Transformation of variable values into variable scores
 #'
 #' @description Calculates score value after transformation relative to the reference value and according to the chosen utility function.
@@ -111,13 +99,13 @@ Transf_ASPIRE<-function(VAL, UTIL, VAL_MEAN_REF, ALPHA = NULL, XVAL = NULL, YSCO
   s<-s[is.na(s)==F]
   return(s)
 }
-```
 
-### 1.1. Test $\sqrt{}$
-
-Les valeurs pour tester :
-
-```{r}
+#' 
+#' ### 1.1. Test $\sqrt{}$
+#' 
+#' Les valeurs pour tester :
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 VAL_tests <- seq(from = -4, to = 16, by = 1)
 VAL_MEAN_REF_tests <- 6
 XVAL_tests <- c(1, 6, 10)
@@ -131,21 +119,21 @@ Transf_ASPIRE(VAL = VAL_tests, UTIL = "hump",VAL_MEAN_REF = VAL_MEAN_REF_tests)
 Transf_ASPIRE(VAL = VAL_tests, UTIL = "step",VAL_MEAN_REF = VAL_MEAN_REF_tests)
 Transf_ASPIRE(VAL = VAL_tests, UTIL = "perso",VAL_MEAN_REF = VAL_MEAN_REF_tests,XVAL = XVAL_tests, YSCO = YSCO_tests)
 
-```
 
-
-
-```{r}
+#' 
+#' 
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 VAL_tests <- seq(from = -4, to = 16, by = 0.01)
 VAL_MEAN_REF_tests <- 6
 ALPHA_tests <- 4
 XVAL_tests <- c(1, 6, 10)
 YSCO_tests <- c(0, 1, 0.5)
-```
 
-Vérifier que ça marche bien pour toutes les valeurs de `UTIL` :
-
-```{r}
+#' 
+#' Vérifier que ça marche bien pour toutes les valeurs de `UTIL` :
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 UTIL_tests_FR <- c("continu" ,"seuil" , "seuilalpha","bosse","perso","pas" ,"pasalpha" ,"paspperso")
 UTIL_tests_EN <- c("continuous","threshold","thresholdalpha","hump" ,"perso","step","stepalpha","stepperso")
 
@@ -169,13 +157,13 @@ abline(h = 0, col = "grey50") ; abline(v = 0, col = "grey50")
 
 par(mfrow=c(1,1))
 
-```
 
-## 2. `Variable` $\sqrt{}$
-
-La fonction :
-
-```{r}
+#' 
+#' ## 2. `Variable` $\sqrt{}$
+#' 
+#' La fonction :
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #-------------------------- Variable() ---------------------------------------------
 
 #' Creation of the ASPIRE Variable object
@@ -266,30 +254,30 @@ Variable<-function(values,ref,utility = "continuous",ALPHA=NULL,XVAL=NULL,YSCO=N
   names(Output)[[2]]<-"calculated_V"
   return(Output)
 }
-```
 
-## 2.1. Architecture $\sqrt{}$
-
-Données pour visualisation et tests des fonctions `Variable`, `Objective` et `Project` :
-
-```{r}
+#' 
+#' ## 2.1. Architecture $\sqrt{}$
+#' 
+#' Données pour visualisation et tests des fonctions `Variable`, `Objective` et `Project` :
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 setwd("C:/Users/renaud.jaunatre/Documents/A_COLLOQUES/16-08-15 SER - Freising/16-08-15 SER - Freising - Cossure")
 library(knitr)
 Cossproj<-read.table("Cossure_ASPIRE_Projet.txt",header=T)
 Cossobj<-read.table("Cossure_ASPIRE_Obj.txt",header=T)
 Cossvar<-read.table("Cossure_ASPIRE_Variables.txt",header=T)
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 EssaiVariable <- Variable(values = Cossvar$Hauteur_veg,ref = Cossvar$Hauteur_veg_Ref,utility = "continuous")
 str(EssaiVariable)
-```
 
-## 2.2. Test Graphique $\sqrt{}$
-
-Fonction `Var.barplot` :
-
-```{r}
+#' 
+#' ## 2.2. Test Graphique $\sqrt{}$
+#' 
+#' Fonction `Var.barplot` :
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Variable barplot
 #'
 #' @description barplot of variable mean value or score
@@ -340,9 +328,9 @@ Var.barplot<-function(variab,plot.ref=TRUE,ylim=NULL,transf=FALSE,main = NULL,..
     }
   }
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow = c(2,3),oma = c(0.1,0.1,2.5,0.1))
 Var.barplot(variab = EssaiVariable)
 Var.barplot(variab = EssaiVariable,plot.ref = FALSE)
@@ -350,20 +338,20 @@ Var.barplot(variab = EssaiVariable,ylim = c(0.5,3))
 Var.barplot(variab = EssaiVariable,transf = TRUE)
 Var.barplot(variab = EssaiVariable,col = "cadetblue")
 mtext(text = "Utilisations possibles de Var.barres.plot",side = 3,outer = TRUE)
-```
 
-*Pour la suite - création de toutes les variables du projet*
-
-```{r}
+#' 
+#' *Pour la suite - création de toutes les variables du projet*
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 for(i in 1:16)
 {
   eval(parse(text = paste(names(Cossvar)[i],"<-Variable(values = Cossvar[,i],ref = Cossvar[,i+16],utility = Cossobj$Utilite[i])")))
 }
-```
 
-## 3. `Objective` $\sqrt{}$
-
-```{r}
+#' 
+#' ## 3. `Objective` $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Creation of the ASPIRE Objective object
 #' @description Creates an ASPIRE Objective object
 #'
@@ -439,20 +427,20 @@ Objective<-function(var_names,var_weight)
   names(Output)<-c("Objective_val","Summary_Var_table","Var_table","V")
   return(Output)
 }
-```
 
-### 3.1. Architecture $\sqrt{}$
-
-```{r}
+#' 
+#' ### 3.1. Architecture $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 EssaiObjectif <- Objective(var_names = c("Hauteur_veg","Ortho_abun","Ortho_comp","Plant_comp"),var_weight = c(1,4,2,0.5))
 str(EssaiObjectif)
-```
 
-### 3.2. Test Graphique bar $\sqrt{}$
-
-Fonction `Obj.barplot`:
-
-```{r}
+#' 
+#' ### 3.2. Test Graphique bar $\sqrt{}$
+#' 
+#' Fonction `Obj.barplot`:
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' objective barplot
 #' @description 
 #'
@@ -499,18 +487,18 @@ Obj.barplot<-function(obj,plot.ref=TRUE,ylim=NULL,las.x = 1,cex.x = 1,main = NUL
   }
   axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Obj.barplot(obj = EssaiObjectif)
 Obj.barplot(obj = EssaiObjectif,plot.ref = FALSE)
 Obj.barplot(obj = EssaiObjectif, ylim = c(0,2))
 Obj.barplot(obj = EssaiObjectif, col = "cadetblue")
-```
 
-### 3.3. Test Graphique spid $\sqrt{}$
-
-```{r}
+#' 
+#' ### 3.3. Test Graphique spid $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Objective radar diagram
 #' @description draw a radar diagram with variables scores of one objective 
 #' @param obj an objective object created with \code{\link{Objective}}
@@ -550,9 +538,9 @@ Obj.radar.plot<-function(obj,limited=TRUE,transp=0.5,col="c7",main="Variables sc
   #The plot
   radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),pcol=c(1,1,1,"Gray70","Gray70","Gray70"),pfcol=c(coul,NA,NA,NA,NA,NA),cglcol="Gray90",new=T,title=main,...)
 }
-```
 
-```{r fig.height=15, fig.width=15}
+#' 
+## ----fig.height=15, fig.width=15--------------------------------------------------------------------------------------------------------------------------------
 library(fmsb)
 par(mfrow=c(3,3))
 Obj.radar.plot(obj = EssaiObjectif)
@@ -564,21 +552,21 @@ Obj.radar.plot(obj = EssaiObjectif,col = "cadetblue")
 Obj.radar.plot(obj = EssaiObjectif,main = "Nice title")
 Obj.radar.plot(obj = EssaiObjectif,plot.ref = FALSE)
 Obj.radar.plot(obj = EssaiObjectif,vlcex=0.7)
-```
 
-## 4. `Project` $\sqrt{}$
-
-*Pour la suite - création de tous les objectifs du projet*
-
-```{r}
+#' 
+#' ## 4. `Project` $\sqrt{}$
+#' 
+#' *Pour la suite - création de tous les objectifs du projet*
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 for(i in 1:(ncol(Cossobj)-2))
 {
   eval(parse(text = paste(names(Cossobj)[2+i],"<-Objective(var_names = as.vector(Cossobj$Variables[Cossobj[2+i]!=0]),var_weight = Cossobj[Cossobj[2+i]!=0,2+i])")))
 }
-```
 
-
-```{r}
+#' 
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Creation of the ASPIRE Project object
 #' @description Creates an ASPIRE Project object
 #'
@@ -658,20 +646,20 @@ Project<-function(obj_name, stakeholders, obj_weight)
   names(Output)<-c("Summary_Proj_Score","Proj_table","Summary_All","Var_table","Variables","Objectives")
   return(Output)
 }
-```
 
-### 4.1. Architecture $\sqrt{}$
-
-```{r}
+#' 
+#' ### 4.1. Architecture $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Cossure <- Project(obj_name = Cossproj[,1],stakeholders = names(Cossproj)[2:ncol(Cossproj)], obj_weight = Cossproj[,2:ncol(Cossproj)])
 str(Cossure)
-```
 
-### 4.2. Test Graphique bars $\sqrt{}$
-
-Fonction `Proj.obj.barplot`
-
-```{r}
+#' 
+#' ### 4.2. Test Graphique bars $\sqrt{}$
+#' 
+#' Fonction `Proj.obj.barplot`
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Proj.obj.barplot
 #'
 #' @description displays a barplot of objectives scores
@@ -707,18 +695,18 @@ Proj.obj.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
   
   axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow=c(1,3))
 Proj.obj.barplot(proj = Cossure)
 Proj.obj.barplot(proj = Cossure, ylim = c(0,2))
 Proj.obj.barplot(proj = Cossure, las.x = 2, cex.x = 0.8)
-```
 
-Fonction `Proj.stak.barplot`
-
-```{r}
+#' 
+#' Fonction `Proj.stak.barplot`
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Proj.stak.barplot
 #'
 #' @description displays a barplot of stakeholders project scores
@@ -754,18 +742,18 @@ Proj.stak.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
   
   axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow=c(1,3))
 Proj.stak.barplot(proj = Cossure)
 Proj.stak.barplot(proj = Cossure, ylim = c(0,2))
 Proj.stak.barplot(proj = Cossure, las.x = 2, cex.x = 0.8)
-```
 
-Fonction `Proj.complete.barplot`
-
-```{r}
+#' 
+#' Fonction `Proj.complete.barplot`
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Proj.complete.barplot
 #'
 #' @description displays a barplot of stakeholders project scores
@@ -813,21 +801,21 @@ Proj.complete.barplot<-function(proj,
   }
   par(mfrow=c(1,1))
 }
-```
 
-```{r fig.height=10}
+#' 
+## ----fig.height=10----------------------------------------------------------------------------------------------------------------------------------------------
 Proj.complete.barplot(proj = Cossure)
 Proj.complete.barplot(proj = Cossure, plot.ref = FALSE)
 Proj.complete.barplot(proj = Cossure, col.stak = "cadetblue", col.obj = "firebrick", col="orange")
 Proj.complete.barplot(proj = Cossure, col.stak = "cadetblue", col.obj = "firebrick", col=c(3:7))
 Proj.complete.barplot(proj = Cossure, col.stak = "cadetblue", col.obj = "firebrick", las.x = 2, cex.x = 0.7)
-```
 
-### 4.3. Test Graphique spids $\sqrt{}$
-
-Fonction `Proj.radar.plot`
-
-```{r }
+#' 
+#' ### 4.3. Test Graphique spids $\sqrt{}$
+#' 
+#' Fonction `Proj.radar.plot`
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Objective scores radar diagram
 #'
 #' @description displays radar diagram of objectives scores
@@ -867,9 +855,9 @@ Proj.radar.plot<-function(proj,limited=TRUE,transp=0.5,col="c7",main="Objectives
   radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),pcol=c(1,1,1,"Gray70","Gray70","Gray70"),
              pfcol=c(coul,NA,NA,NA,NA,NA),cglcol="Gray90",new=T,title=main,...)
 }
-```
 
-```{r fig.height=10}
+#' 
+## ----fig.height=10----------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow=c(3,3))
 Proj.radar.plot(proj = Cossure)
 Proj.radar.plot(proj = Cossure, limited = FALSE)
@@ -879,10 +867,10 @@ Proj.radar.plot(proj = Cossure,col = "c3")
 Proj.radar.plot(proj = Cossure,col = "cadetblue")
 Proj.radar.plot(proj = Cossure,main = "Nice title")
 Proj.radar.plot(proj = Cossure,vlcex=0.7)
-```
 
-
-```{r}
+#' 
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' All scores radar diagram
 #'
 #' @description displays either one or several radar diagrams of all variables scores
@@ -950,9 +938,9 @@ Proj.all.radar.plot<-function(proj,transp=0.5,col=NULL,AllInOne=TRUE,limited=TRU
     par(mfrow=c(1,1),mar=c(5.1,4.1,4.1,2.1))
   }
 }
-```
 
-```{r fig.height= 10}
+#' 
+## ----fig.height= 10---------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow=c(3,3))
 Proj.all.radar.plot(proj = Cossure)
 Proj.all.radar.plot(proj = Cossure, limited = FALSE)
@@ -962,9 +950,9 @@ Proj.all.radar.plot(proj = Cossure,col = "c3")
 Proj.all.radar.plot(proj = Cossure,col = "cadetblue")
 Proj.all.radar.plot(proj = Cossure,main = "Nice title")
 Proj.all.radar.plot(proj = Cossure,cex.lab = 0.7)
-```
 
-```{r fig.height= 10}
+#' 
+## ----fig.height= 10---------------------------------------------------------------------------------------------------------------------------------------------
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE)
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, limited = FALSE)
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, transp = 1)
@@ -973,13 +961,13 @@ Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, col = "c3")
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, col = "cadetblue")
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, col = c("cadetblue","firebrick","c2","darkolivegreen","orange"))
 Proj.all.radar.plot(proj = Cossure, AllInOne = FALSE, cex.lab = 0.7)
-```
 
-### 4.4. Test Graphique recovery wheel $\sqrt{}$
-
-Fonction `wheelscores`
-
-```{r}
+#' 
+#' ### 4.4. Test Graphique recovery wheel $\sqrt{}$
+#' 
+#' Fonction `wheelscores`
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Score wheel
 #'
 #' @description Draw a score wheel inspired from the recovery wheel of SER Standards (McDonald et al., 2016)
@@ -1059,11 +1047,11 @@ wheelscores<-function(lowercat,supercat,scores,col.score='#a1d99b',col.null='whi
             middle = angtext*pi/(nb_cat/2),cex=cex.sup,clockwise = ifelse(angtext>(nb_cat/2),FALSE,TRUE))
   }
 }
-```
 
-Exemple avec les données de McDonald et al., 2016 (Standards de la SER)
-
-```{r fig.width=10, fig.height=10}
+#' 
+#' Exemple avec les données de McDonald et al., 2016 (Standards de la SER)
+#' 
+## ----fig.width=10, fig.height=10--------------------------------------------------------------------------------------------------------------------------------
 library(plotrix)
 sousTcat<-c("Spatial mosaic","All trophic levels","All strata present",
 "No undesirable species","Desirable animals","Desirable plants",
@@ -1076,11 +1064,11 @@ superTcat<-c(rep(c("STRUCTURAL DIVERSITY","SPECIES COMPOSITION", "PHYSICAL CONDI
 scoTres<-c(2,2,3,4,2,4,4,4,4,5,3,5,3,2,2,0,2,2)
 wheelscores(sousTcat,superTcat,scoTres,col.lines = "cadetblue4",col.score = "darkolivegreen2",
 col.border = "gray97",cex.sup = 1.2,cex.low = 0.9, val.max = 5)
-```
 
-Exemple avec les données de Cossure :
-
-```{r fig.width=10, fig.height=10}
+#' 
+#' Exemple avec les données de Cossure :
+#' 
+## ----fig.width=10, fig.height=10--------------------------------------------------------------------------------------------------------------------------------
 #à ajouter dans Proj????????????????????????
 Obj_Var <- data.frame(Obj = c(rep("Birds_habitat",4),rep("Plant_com",3),rep("Ortho_com",3),rep("Coleo_com",3),rep("Socio_eco",3)),
                       Var = c(as.vector(Cossure$Summary_All$Variables$name_var)))
@@ -1090,11 +1078,11 @@ wheelscores(lowercat = Obj_Var$Var,supercat = Obj_Var$Obj,
             val.max = 1,
             col.lines = "cadetblue4",col.score = "darkolivegreen2",
             col.border = "gray97",cex.sup = 1.2,cex.low = 0.9)
-```
 
-## 5. Project_all $\sqrt{}$
-
-```{r}
+#' 
+#' ## 5. Project_all $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' ASPIRE project creation with 3 dataframes
 #'
 #' @description Creates an ASPIRE project object based on three formated dataframe
@@ -1279,21 +1267,21 @@ ASPIRE_all<-function(variable_df,objective_df,project_df)
 
   return(Output)
 }
-```
 
-### 5.1. Architecture $\sqrt{}$
-
-```{r}
+#' 
+#' ### 5.1. Architecture $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Exemple_ALL <- ASPIRE_all(variable_df = Cossvar, objective_df = Cossobj, project_df = Cossproj)
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 str(Exemple_ALL)
-```
 
-### 5.2. Test Graphique bar 1 var $\sqrt{}$
-
-```{r}
+#' 
+#' ### 5.2. Test Graphique bar 1 var $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Variable barplot
 #'
 #' @description barplot of variable mean value or score, after \code{\link{ASPIRE_all}}
@@ -1314,18 +1302,18 @@ Var.barplot.all<-function(variable_name,project_all,plot.ref=TRUE,ylim=NULL,tran
   if(is.null(main)==TRUE){main <- variable_name}else{main <- main}
   Var.barplot(variab = variable_all, plot.ref=plot.ref, ylim=ylim, transf=transf, main = main, ...)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow = c(1,2))
 Var.barplot.all(variable_name = "Ortho_comp", project_all = Exemple_ALL)
 Var.barplot.all(variable_name = "Ortho_comp", project_all = Exemple_ALL, 
                 main = "Orthoptères", col="cadetblue", plot.ref = FALSE, ylim=c(0,2))
-```
 
-### 5.3. Test Graphique bar 1 obj $\sqrt{}$
-
-```{r}
+#' 
+#' ### 5.3. Test Graphique bar 1 obj $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' objective barplot
 #' @description after \code{\link{ASPIRE_all}}
 #'
@@ -1349,17 +1337,17 @@ Obj.barplot.all<-function(objective_name,project_all,plot.ref=TRUE,ylim=NULL,
   Obj.barplot(obj = objective_all,
               plot.ref=plot.ref,ylim=ylim,las.x = las.x,cex.x = cex.x, main = main,...)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow = c(1,2))
 Obj.barplot.all(objective_name = "Birds_habitat",project_all = Exemple_ALL)
 Obj.barplot.all(objective_name = "Birds_habitat",project_all = Exemple_ALL,
                 plot.ref = FALSE,ylim = c(0,2),las.x = 2,cex.x = 0.8,main = "Birds")
-```
 
-### 5.4. Test Graphique spid 1 obj $\sqrt{}$
-```{r}
+#' 
+#' ### 5.4. Test Graphique spid 1 obj $\sqrt{}$
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Objective radar diagram
 #' @description draw a radar diagram with variables scores of one objective after \code{\link{ASPIRE_all}}
 #'
@@ -1385,30 +1373,30 @@ Obj.radar.plot.all<-function(objective_name,project_all,limited=TRUE,transp=0.5,
   Obj.radar.plot(obj = objective_all, limited = limited,transp = transp,
                  col = col, main = main, plot.ref = plot.ref, ...)
 }
-```
 
-```{r}
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 par(mfrow = c(1,2))
 Obj.radar.plot.all(objective_name = "Birds_habitat",project_all = Exemple_ALL)
 Obj.radar.plot.all(objective_name = "Birds_habitat",project_all = Exemple_ALL,
                    limited = FALSE,transp = 0.1,col = "c6",main = "Birds",plot.ref = FALSE)
-```
 
-### 5.5. Autres tests graphiques pour "all" $\sqrt{}$
-
-Aucune modifications pour les fonctions `Proj.obj.barplot.all`, `Proj.stak.barplot`, `Proj.complete.barplot`, `Proj.radar.plot`, `Proj.all.radar.plot` qui fonctionnnent toutes indiférrement avec `Project` ou avec `ASPIRE_all`. 
-
-```{r}
+#' 
+#' ### 5.5. Autres tests graphiques pour "all" $\sqrt{}$
+#' 
+#' Aucune modifications pour les fonctions `Proj.obj.barplot.all`, `Proj.stak.barplot`, `Proj.complete.barplot`, `Proj.radar.plot`, `Proj.all.radar.plot` qui fonctionnnent toutes indiférrement avec `Project` ou avec `ASPIRE_all`. 
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 Proj.obj.barplot(proj = Exemple_ALL)
 Proj.stak.barplot(proj = Exemple_ALL)
 Proj.complete.barplot(proj = Exemple_ALL)
 Proj.radar.plot(proj = Exemple_ALL)
 Proj.all.radar.plot(proj = Exemple_ALL)
-```
 
-### 5.9. Test Graphique recovery wheel $\sqrt{}$
-
-```{r}
+#' 
+#' ### 5.9. Test Graphique recovery wheel $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 #' Score wheel
 #'
 #' @description Draw a score wheel inspired from the recovery wheel of SER Standards (McDonald et al., 2016), after \code{\link{ASPIRE_all}}
@@ -1440,19 +1428,19 @@ wheelscores.all<-function(project_all,col.score='#FDC919',col.null='white',
             col.border = col.border,cex.sup = cex.sup,cex.low = cex.low,
             col.low = col.low, col.sup = col.sup)
 }
-```
 
-```{r fig.height=10}
+#' 
+## ----fig.height=10----------------------------------------------------------------------------------------------------------------------------------------------
 wheelscores.all(project_all = Exemple_ALL)
 wheelscores.all(project_all = Exemple_ALL, col.score = "cadetblue",
                 col.null = 1,col.lines = "green4",col.border = "firebrick",
                 cex.sup = 0.8, cex.low = 0.8, col.low = "white", col.sup = "grey95")
-```
 
-
-## 6. Test avec les données de l'ancien site ASPIRE $\sqrt{}$
-
-```{r}
+#' 
+#' 
+#' ## 6. Test avec les données de l'ancien site ASPIRE $\sqrt{}$
+#' 
+## ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 don_test_var <- read.table("C:/Users/renaud.jaunatre/Documents/A_PROJETS/[A]_Indeco_ASPIRE/[6] Analyses/Exemple_ASPIRE_Shiny_2017/ASPIRE_tab_exemple_Variables.txt",header = T)
 don_test_obj <- read.table("C:/Users/renaud.jaunatre/Documents/A_PROJETS/[A]_Indeco_ASPIRE/[6] Analyses/Exemple_ASPIRE_Shiny_2017/ASPIRE_tab_exemple_Objectifs.txt",header = T)
 don_test_proj <- read.table("C:/Users/renaud.jaunatre/Documents/A_PROJETS/[A]_Indeco_ASPIRE/[6] Analyses/Exemple_ASPIRE_Shiny_2017/ASPIRE_tab_exemple_Projet.txt",header = T)
@@ -1461,18 +1449,18 @@ ASPIRE_all_test <- ASPIRE_all(variable_df = don_test_var, objective_df = don_tes
 
 Proj.complete.barplot(proj = ASPIRE_all_test)
 wheelscores.all(project_all = ASPIRE_all_test)
-```
 
-## 7. Package New
-
-* Penser à `@export` pour toutes les fonctions et `@import` pour spider et recov $\sqrt{}$
-* Penser à `@data`
-* Pnser à `@example` pour toutes les fonctions
-
-## 8. Git Package New
-## 9. Shiny
-### 9.1. Importer données + graphes hist
-### 9.2. Project_all
-### 9.3. Graphes "all"
-### 9.4. Mettre le Shiny sur internet (git?)
-
+#' 
+#' ## 7. Package New
+#' 
+#' * Penser à `@export` pour toutes les fonctions et `@import` pour spider et recov $\sqrt{}$
+#' * Penser à `@data`
+#' * Pnser à `@example` pour toutes les fonctions
+#' 
+#' ## 8. Git Package New
+#' ## 9. Shiny
+#' ### 9.1. Importer données + graphes hist
+#' ### 9.2. Project_all
+#' ### 9.3. Graphes "all"
+#' ### 9.4. Mettre le Shiny sur internet (git?)
+#' 
