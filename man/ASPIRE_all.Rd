@@ -31,3 +31,8 @@ ASPIRE_all(variable_df, objective_df, project_df)
 \description{
 Creates an ASPIRE project object based on three formated dataframe
 }
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+}

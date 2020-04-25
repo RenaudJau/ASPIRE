@@ -1,6 +1,3 @@
-library(knitr)
-purl(input = "Tests_fonction_ASPIRE2020.Rmd", output = "Tests_fonction_ASPIRE2020.R", documentation = 2)
-
 #' Transformation of variable values into variable scores
 #'
 #' @description Calculates score value after transformation relative to the reference value and according to the chosen utility function.

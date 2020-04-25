@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASPIRE_functions.R
 \name{Obj.barplot.all}
 \alias{Obj.barplot.all}
-\title{objective barplot}
+\title{Objective barplot}
 \usage{
 Obj.barplot.all(
   objective_name,
@@ -34,4 +34,12 @@ Obj.barplot.all(
 }
 \description{
 after \code{\link{ASPIRE_all}}
+}
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Obj.barplot.all(objective_name = "Functioning",project_all = Proj_all)
+Obj.barplot.all(objective_name = "Functioning",project_all = Proj_all,
+                plot.ref = FALSE,ylim = c(0,2),las.x = 2,cex.x = 0.6,main = "Birds")
 }

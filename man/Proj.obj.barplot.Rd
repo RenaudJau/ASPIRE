@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASPIRE_functions.R
 \name{Proj.obj.barplot}
 \alias{Proj.obj.barplot}
-\title{Proj.obj.barplot}
+\title{Project objectives plot}
 \usage{
 Proj.obj.barplot(proj, ylim = NULL, las.x = 1, cex.x = 1, ...)
 }
@@ -19,4 +19,11 @@ Proj.obj.barplot(proj, ylim = NULL, las.x = 1, cex.x = 1, ...)
 }
 \description{
 displays a barplot of objectives scores
+}
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Proj.obj.barplot(proj = Proj_all)
+Proj.obj.barplot(proj = Proj_all, ylim = c(0,2), las.x = 2, cex.x = 0.8)
 }

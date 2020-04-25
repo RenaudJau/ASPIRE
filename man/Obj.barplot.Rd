@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASPIRE_functions.R
 \name{Obj.barplot}
 \alias{Obj.barplot}
-\title{objective barplot}
+\title{Objective barplot}
 \usage{
 Obj.barplot(
   obj,
@@ -31,4 +31,22 @@ Obj.barplot(
 }
 \description{
 
+}
+\examples{
+# ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+# creation of the different Variable objects:
+for(i in 1:nrow(ASPIRE.obj))
+{
+  eval(parse(text = paste(names(ASPIRE.var)[i],
+                          "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+}
+# creation of an Objective object:
+Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+                  var_weight = c(2,1,1,2))
+# plot:
+Obj.barplot(obj = Obj1)
+Obj.barplot(obj = Obj1,plot.ref = FALSE, ylim = c(0,2), col = "cadetblue",las.x = 2, cex.x = 0.7)
+}
+\seealso{
+\code{\link{Obj.barplot.all}}
 }

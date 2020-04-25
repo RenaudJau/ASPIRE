@@ -32,3 +32,11 @@ displays radar diagram of objectives scores
 \details{
 The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
 }
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Proj.radar.plot(proj = Proj_all)
+Proj.radar.plot(proj = Proj_all, limited = FALSE, transp = 0.1,
+               col = "c3", main = "Nice title", vlcex=0.7)
+}

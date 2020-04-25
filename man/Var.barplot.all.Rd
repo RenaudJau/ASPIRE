@@ -32,3 +32,11 @@ Var.barplot.all(
 \description{
 barplot of variable mean value or score, after \code{\link{ASPIRE_all}}
 }
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Var.barplot.all(variable_name = "Soil_Resp", project_all = Proj_all)
+Var.barplot.all(variable_name = "Soil_Resp", project_all = Proj_all, 
+                main = "Soil respiration", col="cadetblue", plot.ref = FALSE, ylim=c(0,2))
+}

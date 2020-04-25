@@ -9,9 +9,9 @@ Project(obj_name, stakeholders, obj_weight)
 \arguments{
 \item{obj_name}{a vector \code{c()} including objectives names defined with \code{\link{Objective}}}
 
-\item{stakeholders}{a dataframe \code{data.frame()} of objectives weights with a column for each staekholder (in the same order as  \code{stakeholders}) and the objectives as row  (in the same order than \code{obj_name})}
+\item{stakeholders}{a vector \code{c()} of stakeholders names}
 
-\item{obj_weight}{a vector \code{c()} of weights for all the objectives}
+\item{obj_weight}{a dataframe \code{data.frame()} of objectives weights with a column for each staekholder (in the same order as  \code{stakeholders}) and the objectives as row  (in the same order than \code{obj_name})}
 }
 \value{
 \item{name_objective}{objectives names given in the obj_name argument}
@@ -34,6 +34,24 @@ Project(obj_name, stakeholders, obj_weight)
 }
 \description{
 Creates an ASPIRE Project object
+}
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of the different Variable objects:
+for(i in 1:nrow(ASPIRE.obj))
+{
+  eval(parse(text = paste(names(ASPIRE.var)[i],
+                          "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+}
+# creation of the different Objective objects
+for(i in 1:(ncol(ASPIRE.obj)-2))
+{
+  eval(parse(text = paste(names(ASPIRE.obj)[2+i],"<-Objective(var_names = as.vector(ASPIRE.obj$Variables[ASPIRE.obj[2+i]!=0]),var_weight = ASPIRE.obj[ASPIRE.obj[2+i]!=0,2+i])")))
+}
+# creation of a Project object:
+Proj <- Project(obj_name = c("Biodiversity","Functioning","Production"),
+                stakeholders = c("Naturalist_Asso","Env_Managers","Farmers"),
+                obj_weight = data.frame(c(6,3,1),c(2,2,1),c(1,1,3)))
 }
 \seealso{
 \code{\link{Transf_ASPIRE}}, \code{\link{Variable}}, \code{\link{Objective}}, \code{\link{Project}}

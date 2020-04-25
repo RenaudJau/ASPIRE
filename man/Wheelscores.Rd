@@ -62,6 +62,6 @@ superTcat<-c(rep(c("STRUCTURAL DIVERSITY","SPECIES COMPOSITION", "PHYSICAL CONDI
 "ABSENCE OF THREATS", "EXTERNAL EXCHANGES", "ECOSYSTEM FUNCTION"),each=3))
 scoTres<-c(2,2,3,4,2,4,4,4,4,5,3,5,3,2,2,0,2,2)
 
-Wheelscores(sousTcat,superTcat,scoTres,col.lines = "cadetblue4",col.score = "darkolivegreen2",
+Wheelscores(lowercat = sousTcat,supercat = superTcat, scores = scoTres, col.lines = "cadetblue4",col.score = "darkolivegreen2",
 col.border = "gray97",cex.sup = 1.2,cex.low = 0.6)
 }

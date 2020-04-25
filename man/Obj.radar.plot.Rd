@@ -35,3 +35,22 @@ draw a radar diagram with variables scores of one objective
 \details{
 The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
 }
+\examples{
+# ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+# creation of the different Variable objects:
+for(i in 1:nrow(ASPIRE.obj))
+{
+  eval(parse(text = paste(names(ASPIRE.var)[i],
+                          "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+}
+# creation of an Objective object:
+Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+                  var_weight = c(2,1,1,2))
+# plot:
+Obj.radar.plot(obj = Obj1)
+Obj.radar.plot(obj = Obj1,limited = FALSE, transp = 0.1,
+               col = "c3",main = "Nice title",plot.ref = FALSE,vlcex=0.7)
+}
+\seealso{
+\code{\link{Obj.radar.plot.all}}
+}

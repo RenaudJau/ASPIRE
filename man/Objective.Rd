@@ -31,6 +31,18 @@ Objective(var_names, var_weight)
 \description{
 Creates an ASPIRE Objective object
 }
+\examples{
+# ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+# creation of the different Variable objects:
+for(i in 1:nrow(ASPIRE.obj))
+{
+  eval(parse(text = paste(names(ASPIRE.var)[i],
+                          "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+}
+# creation of an Objective object:
+Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+                  var_weight = c(2,1,1,2))
+}
 \seealso{
 \code{\link{Transf_ASPIRE}}, \code{\link{Variable}}, \code{\link{Objective}}, \code{\link{Project}}
 }

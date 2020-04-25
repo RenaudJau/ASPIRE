@@ -37,6 +37,12 @@ Variable(
 \description{
 Creates an ASPIRE Variable object
 }
+\examples{
+# ASPIRE.var is a data.frame included in the ASPIRE package
+Var1 <- Variable(values = ASPIRE.var$Div_Butterflies,
+ref = ASPIRE.var$Div_Butterflies_Ref,
+utility = "continuous")
+}
 \seealso{
 \code{\link{Transf_ASPIRE}}, \code{\link{Variable}}, \code{\link{Objective}}, \code{\link{Project}}
 }

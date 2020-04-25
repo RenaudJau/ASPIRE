@@ -119,7 +119,10 @@ Transf_ASPIRE<-function(VAL, UTIL, VAL_MEAN_REF, ALPHA = NULL, XVAL = NULL, YSCO
 #' @return \item{summary}{Summary of the Variable object attribute}
 #' 
 #' @export
-#'
+#' @examples # ASPIRE.var is a data.frame included in the ASPIRE package
+#' Var1 <- Variable(values = ASPIRE.var$Div_Butterflies,
+#' ref = ASPIRE.var$Div_Butterflies_Ref,
+#' utility = "continuous")
 Variable<-function(values,ref,utility = "continuous",ALPHA=NULL,XVAL=NULL,YSCO=NULL,NEG=FALSE)
 {
   #Calculation of standard error
@@ -201,8 +204,17 @@ Variable<-function(values,ref,utility = "continuous",ALPHA=NULL,XVAL=NULL,YSCO=N
 #' @param main an overall title for the plot
 #' @param ... other arguments applicable to \code{\link{barplot}}
 #' 
+#' @seealso \code{\link{Var.barplot.all}} 
+#' 
 #' @export
-#'
+#' 
+#' @examples # ASPIRE.var is a data.frame included in the ASPIRE package
+#' Var1 <- Variable(values = ASPIRE.var$Div_Butterflies,
+#'                  ref = ASPIRE.var$Div_Butterflies_Ref,
+#'                  utility = "continuous")
+#' Var.barplot(variab = Var1)
+#' Var.barplot(variab = Var1, plot.ref = FALSE, 
+#'             ylim = c(0,25),transf = TRUE, col = "cadetblue")
 Var.barplot<-function(variab,plot.ref=TRUE,ylim=NULL,transf=FALSE,main = NULL,...)
 {
   if(transf==TRUE) {
@@ -242,6 +254,7 @@ Var.barplot<-function(variab,plot.ref=TRUE,ylim=NULL,transf=FALSE,main = NULL,..
 }
 
 #' Creation of the ASPIRE Objective object
+#' 
 #' @description Creates an ASPIRE Objective object
 #'
 #' @param var_names a vector \code{c()} including variables names defined with \code{\link{Variable}}
@@ -259,7 +272,17 @@ Var.barplot<-function(variab,plot.ref=TRUE,ylim=NULL,transf=FALSE,main = NULL,..
 #' @return \item{V}{a list of variables objects}
 #' 
 #' @export
-#'
+#' 
+#' @examples # ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+#' # creation of the different Variable objects:
+#' for(i in 1:nrow(ASPIRE.obj))
+#' {
+#'   eval(parse(text = paste(names(ASPIRE.var)[i],
+#'                           "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+#' }
+#' # creation of an Objective object:
+#' Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+#'                   var_weight = c(2,1,1,2))
 Objective<-function(var_names,var_weight)
 {
   VarTemp<-get(var_names[1])
@@ -317,7 +340,8 @@ Objective<-function(var_names,var_weight)
   return(Output)
 }
 
-#' objective barplot
+#' Objective barplot
+#' 
 #' @description 
 #'
 #' @param obj an Objective object created with \code{\link{Objective}}
@@ -328,8 +352,23 @@ Objective<-function(var_names,var_weight)
 #' @param main an overall title for the plot
 #' @param ... other arguments from \code{\link{barplot}}
 #'
-#' @export
+#' @seealso \code{\link{Obj.barplot.all}} 
 #'
+#' @export
+#' 
+#' @examples # ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+#' # creation of the different Variable objects:
+#' for(i in 1:nrow(ASPIRE.obj))
+#' {
+#'   eval(parse(text = paste(names(ASPIRE.var)[i],
+#'                           "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+#' }
+#' # creation of an Objective object:
+#' Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+#'                   var_weight = c(2,1,1,2))
+#' # plot:
+#' Obj.barplot(obj = Obj1)
+#' Obj.barplot(obj = Obj1,plot.ref = FALSE, ylim = c(0,2), col = "cadetblue",las.x = 2, cex.x = 0.7)
 Obj.barplot<-function(obj,plot.ref=TRUE,ylim=NULL,las.x = 1,cex.x = 1,main = NULL,...)
 {
   nn<-obj$Summary_Var_table$name_var
@@ -364,6 +403,7 @@ Obj.barplot<-function(obj,plot.ref=TRUE,ylim=NULL,las.x = 1,cex.x = 1,main = NUL
 }
 
 #' Objective radar diagram
+#' 
 #' @description draw a radar diagram with variables scores of one objective 
 #' @param obj an objective object created with \code{\link{Objective}}
 #' @param limited a logical value indicating whether transformed values above 1 should be plotted (therefore avoiding plot distortion)
@@ -373,11 +413,27 @@ Obj.barplot<-function(obj,plot.ref=TRUE,ylim=NULL,las.x = 1,cex.x = 1,main = NUL
 #' @param plot.ref a logical value indicating whether the reference should be drawn or not
 #' @param ... any other arguments applicable to \code{\link{fmsb::radarchart}}
 #'
+#' @seealso \code{\link{Obj.radar.plot.all}} 
+#'
 #' @export
 #' @import fmsb
 #'
 #' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
-#'
+#' 
+#' @examples # ASPIRE.var and ASPIRE.obj are data.frame included in the ASPIRE package
+#' # creation of the different Variable objects:
+#' for(i in 1:nrow(ASPIRE.obj))
+#' {
+#'   eval(parse(text = paste(names(ASPIRE.var)[i],
+#'                           "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+#' }
+#' # creation of an Objective object:
+#' Obj1 <- Objective(var_names = c("Div_Butterflies","Div_Plant","Compo_Butterflies","Compo_Plant"),
+#'                   var_weight = c(2,1,1,2))
+#' # plot:
+#' Obj.radar.plot(obj = Obj1)
+#' Obj.radar.plot(obj = Obj1,limited = FALSE, transp = 0.1,
+#'                col = "c3",main = "Nice title",plot.ref = FALSE,vlcex=0.7)
 Obj.radar.plot<-function(obj,limited=TRUE,transp=0.5,col="c7",main="Variables scores",plot.ref=TRUE,...)
 {
   Val_radar<-data.frame(rbind(rep(1,length(obj$Var_table$name_var)),
@@ -407,8 +463,8 @@ Obj.radar.plot<-function(obj,limited=TRUE,transp=0.5,col="c7",main="Variables sc
 #' @description Creates an ASPIRE Project object
 #'
 #' @param obj_name a vector \code{c()} including objectives names defined with \code{\link{Objective}}
-#' @param stakeholders a dataframe \code{data.frame()} of objectives weights with a column for each staekholder (in the same order as  \code{stakeholders}) and the objectives as row  (in the same order than \code{obj_name})
-#' @param obj_weight a vector \code{c()} of weights for all the objectives
+#' @param stakeholders a vector \code{c()} of stakeholders names
+#' @param obj_weight a dataframe \code{data.frame()} of objectives weights with a column for each staekholder (in the same order as  \code{stakeholders}) and the objectives as row  (in the same order than \code{obj_name})
 #'
 #' @seealso \code{\link{Transf_ASPIRE}}, \code{\link{Variable}}, \code{\link{Objective}}, \code{\link{Project}}
 #'
@@ -423,7 +479,23 @@ Obj.radar.plot<-function(obj,limited=TRUE,transp=0.5,col="c7",main="Variables sc
 #' @return \item{Objectives}{A list of objects obtained from \code{\link{Objective}}, one per objective}
 #' 
 #' @export
-#'
+#' 
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of the different Variable objects:
+#' for(i in 1:nrow(ASPIRE.obj))
+#' {
+#'   eval(parse(text = paste(names(ASPIRE.var)[i],
+#'                           "<-Variable(values = ASPIRE.var[,i],ref = ASPIRE.var[,i+(ncol(ASPIRE.var)/2)],utility = ASPIRE.obj$Utility[i])")))
+#' }
+#' # creation of the different Objective objects
+#' for(i in 1:(ncol(ASPIRE.obj)-2))
+#' {
+#'   eval(parse(text = paste(names(ASPIRE.obj)[2+i],"<-Objective(var_names = as.vector(ASPIRE.obj$Variables[ASPIRE.obj[2+i]!=0]),var_weight = ASPIRE.obj[ASPIRE.obj[2+i]!=0,2+i])")))
+#' }
+#' # creation of a Project object:
+#' Proj <- Project(obj_name = c("Biodiversity","Functioning","Production"),
+#'                 stakeholders = c("Naturalist_Asso","Env_Managers","Farmers"),
+#'                 obj_weight = data.frame(c(6,3,1),c(2,2,1),c(1,1,3)))
 Project<-function(obj_name, stakeholders, obj_weight)
 {
   name_objective<-obj_name
@@ -483,312 +555,6 @@ Project<-function(obj_name, stakeholders, obj_weight)
   return(Output)
 }
 
-#' Proj.obj.barplot
-#'
-#' @description displays a barplot of objectives scores
-#'
-#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
-#' @param ylim limits for the y axis
-#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
-#' @param cex.x magnification to be used for the axis label 
-#' @param ... other arguments applicable to \code{\link{barplot}}
-#'
-#' @export
-#'
-Proj.obj.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
-{
-  
-  nn<-proj$Summary_All$Objectives$name_objective
-  yv<-proj$Summary_All$Objectives$Obj_WMean
-  zsup<-proj$Summary_All$Objectives$Obj_WMean + proj$Summary_All$Objectives$Obj_Wsem
-  zinf<-proj$Summary_All$Objectives$Obj_WMean - proj$Summary_All$Objectives$Obj_Wsem
-  
-  if(is.null(ylim)==TRUE){YL <- c(0,1.1*max(zsup))} else {YL <- ylim}
-  
-  xv<-barplot(yv,ylim=YL,xaxt="n",...)
-  g<-(max(xv,na.rm=T)-min(xv,na.rm=T))/50
-  g<-ifelse(g==0,0.25,g)
-  
-  for(i in 1:length(xv))
-  {
-    lines(c(xv[i],xv[i]),c(zsup[i],zinf[i]))
-    lines(c(xv[i]-g,xv[i]+g),c(zsup[i],zsup[i]))
-    lines(c(xv[i]-g,xv[i]+g),c(zinf[i],zinf[i]))
-  }
-  
-  axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
-}
-
-#' Proj.stak.barplot
-#'
-#' @description displays a barplot of stakeholders project scores
-#'
-#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
-#' @param ylim limits for the y axis
-#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
-#' @param cex.x magnification to be used for the axis label 
-#' @param ... other arguments applicable to \code{\link{barplot}}
-#'
-#' @export
-#'
-Proj.stak.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
-{
-  
-  nn<-proj$Summary_All$Scores$stakeholders
-  yv<-proj$Summary_All$Scores$Score
-  zsup<-proj$Summary_All$Scores$Score + proj$Summary_All$Scores$Error
-  zinf<-proj$Summary_All$Scores$Score - proj$Summary_All$Scores$Error
-  
-  if(is.null(ylim)==TRUE){YL <- c(0,1.1*max(zsup))} else {YL <- ylim}
-  
-  xv<-barplot(yv,ylim=YL,xaxt="n",...)
-  g<-(max(xv,na.rm=T)-min(xv,na.rm=T))/50
-  g<-ifelse(g==0,0.25,g)
-  
-  for(i in 1:length(xv))
-  {
-    lines(c(xv[i],xv[i]),c(zsup[i],zinf[i]))
-    lines(c(xv[i]-g,xv[i]+g),c(zsup[i],zsup[i]))
-    lines(c(xv[i]-g,xv[i]+g),c(zinf[i],zinf[i]))
-  }
-  
-  axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
-}
-
-#' Proj.complete.barplot
-#'
-#' @description displays a barplot of stakeholders project scores
-#'
-#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
-#' @param col.stak color of stakeholders plot
-#' @param col.obj color of objectives plot
-#' @param col.var color of variable scores plot (repeated if only one color is provided)
-#' @param plot.ref a logical value indicating whether the reference should be drawn or not
-#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
-#' @param cex.x magnification to be used for the axis label
-#'
-#' @export
-#'
-Proj.complete.barplot<-function(proj,
-                                col.stak=NULL, col.obj=NULL, col.var=NULL,
-                                plot.ref=TRUE,
-                                las.x = 1,cex.x = 1)
-{
-  nplot<-length(proj$Summary_All$Objectives$name_objective)+2
-  par(mfrow=n2mfrow(nplot))
-  
-  if(is.null(col.stak)==TRUE){col.stak <- 8}else{col.stak <- col.stak}
-  if(is.null(col.obj)==TRUE){col.obj <- 8}else{col.obj <- col.obj}
-  
-  if(is.null(col.var)==FALSE & length(col.var)!=1 & length(col.var)!=length(proj$Summary_All$Objectives$name_objective)){
-    stop("numbers of elements in col.var does not correspond to objective number")} 
-  if(is.null(col.var)==TRUE){col.var <- rep(8,length(proj$Summary_All$Objectives$name_objective))}else{
-    if(length(col.var)==1) {
-      col.var<- rep(col.var,length(proj$Summary_All$Objectives$name_objective))
-    }else{col.var<- col.var}}
-  
-  Proj.stak.barplot(proj = proj, las.x = las.x, cex.x = cex.x, 
-                    col = col.stak, main = "Stakeholders scores")
-  
-  Proj.obj.barplot(proj = proj, las.x = las.x, cex.x = cex.x, 
-                   col = col.obj, main = "Objectives scores")
-  
-  
-  for (i in 1:(nplot-2))
-  {
-    Obj.barplot(obj = proj$Objectives[i][[1]], 
-                col = col.var[i], main=paste0("Obj: ",proj$Summary_All$Objectives$name_objective[i]),
-                las.x = las.x, cex.x = cex.x, font.main = 1,plot.ref = plot.ref)
-  }
-  par(mfrow=c(1,1))
-}
-
-#' Objective scores radar diagram
-#'
-#' @description displays radar diagram of objectives scores
-#'
-#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
-#' @param limited a logical value indicating whether transformed values above 1 should be plotted (therefore avoiding plot distortion)
-#' @param transp a value between 0 and 1 indicating transparancy of the radar polygon
-#' @param col radar polygon color, can be any color managed by R, but \code{transp} won't work if other values "c1", "c..", "c8" are used, corresponding to basic R colors from 1 to 8
-#' @param main text for main title
-#' @param ... any other arguments applicable to \code{\link{fmsb::radarchart}}
-#'
-#' @export
-#' @import fmsb
-#'
-#' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
-#'
-Proj.radar.plot<-function(proj,limited=TRUE,transp=0.5,col="c7",main="Objectives scores",...)
-{
-  Val_radar<-data.frame(rbind(rep(1,length(proj$Summary_All$Objectives$name_objective)),
-                              rep(0,length(proj$Summary_All$Objectives$name_objective)),
-                              proj$Summary_All$Objectives$Obj_WMean,
-                              proj$Summary_All$Objectives$Obj_WMean - proj$Summary_All$Objectives$Obj_Wsem,
-                              proj$Summary_All$Objectives$Obj_WMean + proj$Summary_All$Objectives$Obj_Wsem))
-  if(limited==TRUE){Val_radar <- data.frame(apply(Val_radar,c(1,2),function(x) ifelse(x>1,1,x)))}
-  names(Val_radar)<-proj$Summary_All$Objectives$name_objective
-  
-  #Creation of colors
-  colnew<-rgb(c(0/255,255/255,34/255,24/255,152/255,238/255,255/255,112/255)
-              ,c(0/255,48/255,139/255,116/255,245/255,48/255,215/255,112/255)
-              ,c(0/255,48/255,34/255,205/255,255/255,167/255,0/255,112/255),alpha=rep(transp,8))
-  coltab<-data.frame(colnew,colnum=paste0("c",c(1:8)))
-  
-  coul<-if(col%in%coltab$colnum==TRUE) as.character(coltab$colnew[coltab$colnum==col]) else col
-  
-  #The plot
-  radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),pcol=c(1,1,1,"Gray70","Gray70","Gray70"),
-             pfcol=c(coul,NA,NA,NA,NA,NA),cglcol="Gray90",new=T,title=main,...)
-}
-
-#' All scores radar diagram
-#'
-#' @description displays either one or several radar diagrams of all variables scores
-#'
-#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
-#' @param transp a value between 0 and 1 indicating transparancy of the radar polygon
-#' @param col  polygon color, can be any color managed by R, but \code{transp} won't work if other values than "c1", "c..", "c8" are used, corresponding to basic R colors from 1 to 8. If only one color is provided and \code{AllInOne=FALSE}, color is repeated  for all objectives
-#' @param AllInOne a logical value indicating whether all the variables scores should be displeyd on one radardiagram or assembled by objectives
-#' @param limited a logical value indicating whether transformed values above 1 should be plotted (therefore avoiding plot distortion)
-#' @param main text for main title, only applicable if \code{AllInOne=TRUE}
-#' @param plot.ref a logical value indicating whether the reference should be drawn or not
-#' @param cex.lab magnification to be used for the labels 
-#'
-#' @export
-#' @import fmsb
-#'
-#' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
-#'
-Proj.all.radar.plot<-function(proj,transp=0.5,col=NULL,AllInOne=TRUE,limited=TRUE,main="",plot.ref=TRUE,cex.lab=1)
-{
-  # colors
-  transp<-transp
-  colnew<-rgb(c(0/255,255/255,34/255,24/255,152/255,238/255,255/255,112/255)
-              ,c(0/255,48/255,139/255,116/255,245/255,48/255,215/255,112/255)
-              ,c(0/255,48/255,34/255,205/255,255/255,167/255,0/255,112/255),alpha=rep(transp,8))
-  coltab<-data.frame(colnew,colnum=paste0("c",c(1:8)))
-  
-  DF <- proj$Summary_All$Variables
-  
-  if(AllInOne==TRUE){
-    Val_radar<-data.frame(rbind(rep(1,length(DF$name_var)),
-                                rep(0,length(DF$name_var)),
-                                DF$mean_transf_value,
-                                DF$mean_transf_value - DF$error_transf_value,
-                                DF$mean_transf_value + DF$error_transf_value))
-    if(plot.ref==TRUE) {Val_radar<-data.frame(rbind(Val_radar,rep(c(1),ncol(Val_radar))))
-    Val_radar<-data.frame(rbind(Val_radar,(1-DF$error_transf_ref)))}
-    if(limited==TRUE){Val_radar <- data.frame(apply(Val_radar,c(1,2),function(x) ifelse(x>1,1,x)))}
-    names(Val_radar)<-DF$name_var
-    
-    if(is.null(col)==TRUE){col <- "c7"}else{if(length(col)>1){col <- col[1]}}
-    
-    coul<-if(col%in%coltab$colnum=="TRUE") as.character(coltab$colnew[coltab$colnum==col]) else col
-    
-    radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),
-               pcol=c(1,1,1,"Gray70","Gray70","Gray70"),pfcol=c(coul,NA,NA,NA,NA,NA),
-               cglcol="Gray90",new=T,title=main,vlcex = cex.lab)
-    
-  } else{
-    nplot<-length(proj$Summary_All$Objectives$name_objective)
-    par(mfrow=n2mfrow(nplot),mar=c(1,1,2.5,1))
-    
-    if(is.null(col)==TRUE){col <- "c7"}
-    if(length(col)==1) {col <- rep(col,length(proj$Summary_All$Objectives$name_objective))}
-    if(length(col)!=length(proj$Summary_All$Objectives$name_objective)) stop("Number of colors provided does not correspond to the number of objectives")
-    
-    for (i in 1:nplot)
-    {
-      
-      Obj.radar.plot(obj = proj$Objectives[i][[1]],
-                     main=paste("Obj:",proj$Summary_All$Objectives$name_objective[i]),
-                     col=col[i],limited=limited,plot.ref = plot.ref,transp = transp,vlcex = cex.lab)
-    }
-    par(mfrow=c(1,1),mar=c(5.1,4.1,4.1,2.1))
-  }
-}
-
-#' Score wheel
-#'
-#' @description Draw a score wheel inspired from the recovery wheel of SER Standards (McDonald et al., 2016)
-#'
-#' @param lowercat A vector of scores labels
-#' @param supercat A vector of categories labels
-#' @param scores A numeric vector of scores
-#' @param col.score The color of achieved scores
-#' @param col.null The color of unachievde scores
-#' @param col.lines The color of lines and circles
-#' @param col.border The color of the border containing categories labels
-#' @param cex.sup An expansion factor for categories labels
-#' @param cex.low An expansion factor for scores labels
-#' @param val.max theoretical score maximum value (5 by defaut)
-#' @param col.sup text color for categories labels
-#' @param col.low text color for scores labels
-#' 
-#' @details uses function from plotrix package Lemon, J. (2006) Plotrix: a package in the red light district of R. R-News, 6(4): 8-12.
-#' 
-#' @export
-#' @import plotrix
-#' 
-#' @examples # data to draw the same scores as in McDonald et al., 2016
-#' sousTcat<-c("Spatial mosaic","All trophic levels","All strata present",
-#' "No undesirable species","Desirable animals","Desirable plants",
-#' "Water chemo-physical","Substrate chemical","Substrate physical",
-#' "Contamination","Invasive species","Over-utilization",
-#' "Habitat links","Gene flows","Landscape flows",
-#' "Resilience/recruitment","Habitat & interactions","Productivity/cycling")
-#' superTcat<-c(rep(c("STRUCTURAL DIVERSITY","SPECIES COMPOSITION", "PHYSICAL CONDITIONS", 
-#' "ABSENCE OF THREATS", "EXTERNAL EXCHANGES", "ECOSYSTEM FUNCTION"),each=3))
-#' scoTres<-c(2,2,3,4,2,4,4,4,4,5,3,5,3,2,2,0,2,2)
-#' 
-#' Wheelscores(sousTcat,superTcat,scoTres,col.lines = "cadetblue4",col.score = "darkolivegreen2",
-#' col.border = "gray97",cex.sup = 1.2,cex.low = 0.6)
-Wheelscores<-function(lowercat,supercat,scores,col.score='#a1d99b',col.null='white',
-                      col.lines="black",col.border='grey',cex.sup=1,cex.low=0.7,val.max=5,
-                      col.low = 1, col.sup = 1)
-{
-  pie(1, radius=1, init.angle=90, col=col.border, border = NA, labels='')
-  
-  col.score<-col.score
-  col.null<-col.null
-  
-  scores <- sapply(scores,function(x) ifelse(x>val.max,val.max,x))
-  scores <- scores*5/val.max
-  
-  soscores<-sort(unique(scores),decreasing = TRUE)
-  for(i in 1:length(soscores))
-  {
-    col_cir<-ifelse(scores>=soscores[i],col.score,col.null)
-    floating.pie(0,0,rep(c(1),length(scores)),radius=soscores[i]/6, startpos=0, col=as.character(col_cir),border=NA)
-  }
-  
-  for(i in 1:6)
-  {
-    lwdcir<-ifelse(i>=5, 2, 1)
-    draw.circle(0,0,i/6,border = col.lines, lwd = lwdcir)
-  }
-  
-  nb_cat<-length(lowercat)
-  for(i in 1:nb_cat){
-    segments(x0 = 0,y0=0,x1 = 5/6*cos(i*pi/(nb_cat/2)), y1 = 5/6*sin(i*pi/(nb_cat/2)),col = col.lines)
-    rot<-ifelse(i>=(nb_cat/4) & i<3*(nb_cat/4), 180, 0)
-    text(x= 0.5*cos((i-0.5)*pi/(nb_cat/2)), y= 0.5*sin((i-0.5)*pi/(nb_cat/2)),
-         labels = lowercat[i], srt=rot+180/pi*(i-0.5)*pi/(nb_cat/2),cex = cex.low, col = col.low)
-  }
-  
-  largsupercat<-as.vector(tapply(supercat,factor(supercat,levels=unique(supercat)),length))
-  angline<-0
-  for(i in 1:length(largsupercat)){
-    angline<-angline+largsupercat[i]
-    segments(x0 = 0,y0=0,x1 = cos(angline*pi/(nb_cat/2)), y1 = sin(angline*pi/(nb_cat/2)),
-             lwd = 2,col=col.lines)
-    angtext<-angline-(largsupercat[i]/2)
-    arctext(x = as.character(unique(supercat)[i]), center = c(0, 0), radius = 5.5/6,col = col.sup, 
-            middle = angtext*pi/(nb_cat/2),cex=cex.sup,clockwise = ifelse(angtext>(nb_cat/2),FALSE,TRUE))
-  }
-}
-
 #' ASPIRE project creation with 3 dataframes
 #'
 #' @description Creates an ASPIRE project object based on three formated dataframe
@@ -807,6 +573,9 @@ Wheelscores<-function(lowercat,supercat,scores,col.score='#a1d99b',col.null='whi
 #' 
 #' @export
 #'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
 ASPIRE_all<-function(variable_df,objective_df,project_df)
 {
   #--------------Check up:
@@ -847,7 +616,7 @@ ASPIRE_all<-function(variable_df,objective_df,project_df)
   {
     Utility[i]<-if(objective_df$Utility[i]%in%c("continu","continuous","seuil","threshold",
                                                 "seuilalpha","thresholdalpha","hump","bosse","perso",
-                                                "pas","pasalpha","stepalpha","paspperso","stepperso")==FALSE) 1 else 0
+                                                "pas","step","pasalpha","stepalpha","paspperso","stepperso")==FALSE) 1 else 0
   }
   if(sum(Utility)>0) stop("Warning, at least one utility is not recognized. ASPIRE analyses can't be continued")
   
@@ -988,6 +757,12 @@ ASPIRE_all<-function(variable_df,objective_df,project_df)
 #' 
 #' @export
 #'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Var.barplot.all(variable_name = "Soil_Resp", project_all = Proj_all)
+#' Var.barplot.all(variable_name = "Soil_Resp", project_all = Proj_all, 
+#'                 main = "Soil respiration", col="cadetblue", plot.ref = FALSE, ylim=c(0,2))
 Var.barplot.all<-function(variable_name,project_all,plot.ref=TRUE,ylim=NULL,transf=FALSE,main=NULL,...)
 {
   
@@ -996,7 +771,8 @@ Var.barplot.all<-function(variable_name,project_all,plot.ref=TRUE,ylim=NULL,tran
   Var.barplot(variab = variable_all, plot.ref=plot.ref, ylim=ylim, transf=transf, main = main, ...)
 }
 
-#' objective barplot
+#' Objective barplot
+#' 
 #' @description after \code{\link{ASPIRE_all}}
 #'
 #' @param objective_name an objective name
@@ -1009,7 +785,13 @@ Var.barplot.all<-function(variable_name,project_all,plot.ref=TRUE,ylim=NULL,tran
 #' @param ... other arguments from \code{\link{barplot}}
 #'
 #' @export
-#'
+#' 
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Obj.barplot.all(objective_name = "Functioning",project_all = Proj_all)
+#' Obj.barplot.all(objective_name = "Functioning",project_all = Proj_all,
+#'                 plot.ref = FALSE,ylim = c(0,2),las.x = 2,cex.x = 0.6,main = "Birds")
 Obj.barplot.all<-function(objective_name,project_all,plot.ref=TRUE,ylim=NULL,
                           las.x = 1,cex.x = 1,main = NULL,...)
 {
@@ -1019,7 +801,266 @@ Obj.barplot.all<-function(objective_name,project_all,plot.ref=TRUE,ylim=NULL,
               plot.ref=plot.ref,ylim=ylim,las.x = las.x,cex.x = cex.x, main = main,...)
 }
 
+#' Project objectives plot
+#'
+#' @description displays a barplot of objectives scores
+#'
+#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
+#' @param ylim limits for the y axis
+#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
+#' @param cex.x magnification to be used for the axis label 
+#' @param ... other arguments applicable to \code{\link{barplot}}
+#'
+#' @export
+#'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Proj.obj.barplot(proj = Proj_all)
+#' Proj.obj.barplot(proj = Proj_all, ylim = c(0,2), las.x = 2, cex.x = 0.8)
+Proj.obj.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
+{
+  
+  nn<-proj$Summary_All$Objectives$name_objective
+  yv<-proj$Summary_All$Objectives$Obj_WMean
+  zsup<-proj$Summary_All$Objectives$Obj_WMean + proj$Summary_All$Objectives$Obj_Wsem
+  zinf<-proj$Summary_All$Objectives$Obj_WMean - proj$Summary_All$Objectives$Obj_Wsem
+  
+  if(is.null(ylim)==TRUE){YL <- c(0,1.1*max(zsup))} else {YL <- ylim}
+  
+  xv<-barplot(yv,ylim=YL,xaxt="n",...)
+  g<-(max(xv,na.rm=T)-min(xv,na.rm=T))/50
+  g<-ifelse(g==0,0.25,g)
+  
+  for(i in 1:length(xv))
+  {
+    lines(c(xv[i],xv[i]),c(zsup[i],zinf[i]))
+    lines(c(xv[i]-g,xv[i]+g),c(zsup[i],zsup[i]))
+    lines(c(xv[i]-g,xv[i]+g),c(zinf[i],zinf[i]))
+  }
+  
+  axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
+}
+
+#' Stakeholder scores barplot
+#'
+#' @description displays a barplot of stakeholders project scores
+#'
+#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
+#' @param ylim limits for the y axis
+#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
+#' @param cex.x magnification to be used for the axis label 
+#' @param ... other arguments applicable to \code{\link{barplot}}
+#'
+#' @export
+#'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Proj.stak.barplot(proj = Proj_all)
+#' Proj.stak.barplot(proj = Proj_all, ylim = c(0,2), las.x = 2, cex.x = 0.8)
+Proj.stak.barplot<-function(proj,ylim=NULL,las.x = 1,cex.x = 1,...)
+{
+  
+  nn<-proj$Summary_All$Scores$stakeholders
+  yv<-proj$Summary_All$Scores$Score
+  zsup<-proj$Summary_All$Scores$Score + proj$Summary_All$Scores$Error
+  zinf<-proj$Summary_All$Scores$Score - proj$Summary_All$Scores$Error
+  
+  if(is.null(ylim)==TRUE){YL <- c(0,1.1*max(zsup))} else {YL <- ylim}
+  
+  xv<-barplot(yv,ylim=YL,xaxt="n",...)
+  g<-(max(xv,na.rm=T)-min(xv,na.rm=T))/50
+  g<-ifelse(g==0,0.25,g)
+  
+  for(i in 1:length(xv))
+  {
+    lines(c(xv[i],xv[i]),c(zsup[i],zinf[i]))
+    lines(c(xv[i]-g,xv[i]+g),c(zsup[i],zsup[i]))
+    lines(c(xv[i]-g,xv[i]+g),c(zinf[i],zinf[i]))
+  }
+  
+  axis(side = 1, at=xv, labels = nn, las=las.x, cex.axis=cex.x, tick = FALSE)
+}
+
+#' Complete project barplots
+#'
+#' @description displays a barplot of stakeholders project scores
+#'
+#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
+#' @param col.stak color of stakeholders plot
+#' @param col.obj color of objectives plot
+#' @param col.var color of variable scores plot (repeated if only one color is provided)
+#' @param plot.ref a logical value indicating whether the reference should be drawn or not
+#' @param las.x axis label horizontal (1) or perpendicular to the axis (2)
+#' @param cex.x magnification to be used for the axis label
+#'
+#' @export
+#'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Proj.complete.barplot(proj = Proj_all)
+#' Proj.complete.barplot(proj = Proj_all, plot.ref = FALSE, col.stak = "cadetblue",
+#'                       col.obj = "firebrick", col="orange", las.x = 2, cex.x = 0.7)
+Proj.complete.barplot<-function(proj,
+                                col.stak=NULL, col.obj=NULL, col.var=NULL,
+                                plot.ref=TRUE,
+                                las.x = 1,cex.x = 1)
+{
+  nplot<-length(proj$Summary_All$Objectives$name_objective)+2
+  par(mfrow=n2mfrow(nplot))
+  
+  if(is.null(col.stak)==TRUE){col.stak <- 8}else{col.stak <- col.stak}
+  if(is.null(col.obj)==TRUE){col.obj <- 8}else{col.obj <- col.obj}
+  
+  if(is.null(col.var)==FALSE & length(col.var)!=1 & length(col.var)!=length(proj$Summary_All$Objectives$name_objective)){
+    stop("numbers of elements in col.var does not correspond to objective number")} 
+  if(is.null(col.var)==TRUE){col.var <- rep(8,length(proj$Summary_All$Objectives$name_objective))}else{
+    if(length(col.var)==1) {
+      col.var<- rep(col.var,length(proj$Summary_All$Objectives$name_objective))
+    }else{col.var<- col.var}}
+  
+  Proj.stak.barplot(proj = proj, las.x = las.x, cex.x = cex.x, 
+                    col = col.stak, main = "Stakeholders scores")
+  
+  Proj.obj.barplot(proj = proj, las.x = las.x, cex.x = cex.x, 
+                   col = col.obj, main = "Objectives scores")
+  
+  
+  for (i in 1:(nplot-2))
+  {
+    Obj.barplot(obj = proj$Objectives[i][[1]], 
+                col = col.var[i], main=paste0("Obj: ",proj$Summary_All$Objectives$name_objective[i]),
+                las.x = las.x, cex.x = cex.x, font.main = 1,plot.ref = plot.ref)
+  }
+  par(mfrow=c(1,1))
+}
+
+#' Objective scores radar diagram
+#'
+#' @description displays radar diagram of objectives scores
+#'
+#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
+#' @param limited a logical value indicating whether transformed values above 1 should be plotted (therefore avoiding plot distortion)
+#' @param transp a value between 0 and 1 indicating transparancy of the radar polygon
+#' @param col radar polygon color, can be any color managed by R, but \code{transp} won't work if other values "c1", "c..", "c8" are used, corresponding to basic R colors from 1 to 8
+#' @param main text for main title
+#' @param ... any other arguments applicable to \code{\link{fmsb::radarchart}}
+#'
+#' @export
+#' @import fmsb
+#'
+#' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
+#'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Proj.radar.plot(proj = Proj_all)
+#' Proj.radar.plot(proj = Proj_all, limited = FALSE, transp = 0.1,
+#'                col = "c3", main = "Nice title", vlcex=0.7)
+Proj.radar.plot<-function(proj,limited=TRUE,transp=0.5,col="c7",main="Objectives scores",...)
+{
+  Val_radar<-data.frame(rbind(rep(1,length(proj$Summary_All$Objectives$name_objective)),
+                              rep(0,length(proj$Summary_All$Objectives$name_objective)),
+                              proj$Summary_All$Objectives$Obj_WMean,
+                              proj$Summary_All$Objectives$Obj_WMean - proj$Summary_All$Objectives$Obj_Wsem,
+                              proj$Summary_All$Objectives$Obj_WMean + proj$Summary_All$Objectives$Obj_Wsem))
+  if(limited==TRUE){Val_radar <- data.frame(apply(Val_radar,c(1,2),function(x) ifelse(x>1,1,x)))}
+  names(Val_radar)<-proj$Summary_All$Objectives$name_objective
+  
+  #Creation of colors
+  colnew<-rgb(c(0/255,255/255,34/255,24/255,152/255,238/255,255/255,112/255)
+              ,c(0/255,48/255,139/255,116/255,245/255,48/255,215/255,112/255)
+              ,c(0/255,48/255,34/255,205/255,255/255,167/255,0/255,112/255),alpha=rep(transp,8))
+  coltab<-data.frame(colnew,colnum=paste0("c",c(1:8)))
+  
+  coul<-if(col%in%coltab$colnum==TRUE) as.character(coltab$colnew[coltab$colnum==col]) else col
+  
+  #The plot
+  radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),pcol=c(1,1,1,"Gray70","Gray70","Gray70"),
+             pfcol=c(coul,NA,NA,NA,NA,NA),cglcol="Gray90",new=T,title=main,...)
+}
+
+#' All scores radar diagram
+#'
+#' @description displays either one or several radar diagrams of all variables scores
+#'
+#' @param proj project name defined with \code{\link{Project}} or \code{\link{ASPIRE_all}}
+#' @param transp a value between 0 and 1 indicating transparancy of the radar polygon
+#' @param col  polygon color, can be any color managed by R, but \code{transp} won't work if other values than "c1", "c..", "c8" are used, corresponding to basic R colors from 1 to 8. If only one color is provided and \code{AllInOne=FALSE}, color is repeated  for all objectives
+#' @param AllInOne a logical value indicating whether all the variables scores should be displeyd on one radardiagram or assembled by objectives
+#' @param limited a logical value indicating whether transformed values above 1 should be plotted (therefore avoiding plot distortion)
+#' @param main text for main title, only applicable if \code{AllInOne=TRUE}
+#' @param plot.ref a logical value indicating whether the reference should be drawn or not
+#' @param cex.lab magnification to be used for the labels 
+#'
+#' @export
+#' @import fmsb
+#'
+#' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
+#'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Proj.all.radar.plot(proj = Proj_all)
+#' Proj.all.radar.plot(proj = Proj_all, limited = FALSE, transp = 0.1,
+#'                     col = "c3", main = "Nice title", cex.lab = 0.7)
+#'                     Proj.all.radar.plot(proj = Proj_all, AllInOne = FALSE)
+#'Proj.all.radar.plot(proj = Proj_all, AllInOne = FALSE, 
+#'                    limited = FALSE, transp = 0.1,
+#'                    col = "c3", main = "Nice title", cex.lab = 0.7)
+Proj.all.radar.plot<-function(proj,transp=0.5,col=NULL,AllInOne=TRUE,limited=TRUE,main="",plot.ref=TRUE,cex.lab=1)
+{
+  # colors
+  transp<-transp
+  colnew<-rgb(c(0/255,255/255,34/255,24/255,152/255,238/255,255/255,112/255)
+              ,c(0/255,48/255,139/255,116/255,245/255,48/255,215/255,112/255)
+              ,c(0/255,48/255,34/255,205/255,255/255,167/255,0/255,112/255),alpha=rep(transp,8))
+  coltab<-data.frame(colnew,colnum=paste0("c",c(1:8)))
+  
+  DF <- proj$Summary_All$Variables
+  
+  if(AllInOne==TRUE){
+    Val_radar<-data.frame(rbind(rep(1,length(DF$name_var)),
+                                rep(0,length(DF$name_var)),
+                                DF$mean_transf_value,
+                                DF$mean_transf_value - DF$error_transf_value,
+                                DF$mean_transf_value + DF$error_transf_value))
+    if(plot.ref==TRUE) {Val_radar<-data.frame(rbind(Val_radar,rep(c(1),ncol(Val_radar))))
+    Val_radar<-data.frame(rbind(Val_radar,(1-DF$error_transf_ref)))}
+    if(limited==TRUE){Val_radar <- data.frame(apply(Val_radar,c(1,2),function(x) ifelse(x>1,1,x)))}
+    names(Val_radar)<-DF$name_var
+    
+    if(is.null(col)==TRUE){col <- "c7"}else{if(length(col)>1){col <- col[1]}}
+    
+    coul<-if(col%in%coltab$colnum=="TRUE") as.character(coltab$colnew[coltab$colnum==col]) else col
+    
+    radarchart(Val_radar,plty=c(1,2,2,1,3,3),pty=c(16,32,32,32,32,32),
+               pcol=c(1,1,1,"Gray70","Gray70","Gray70"),pfcol=c(coul,NA,NA,NA,NA,NA),
+               cglcol="Gray90",new=T,title=main,vlcex = cex.lab)
+    
+  } else{
+    nplot<-length(proj$Summary_All$Objectives$name_objective)
+    par(mfrow=n2mfrow(nplot),mar=c(1,1,2.5,1))
+    
+    if(is.null(col)==TRUE){col <- "c7"}
+    if(length(col)==1) {col <- rep(col,length(proj$Summary_All$Objectives$name_objective))}
+    if(length(col)!=length(proj$Summary_All$Objectives$name_objective)) stop("Number of colors provided does not correspond to the number of objectives")
+    
+    for (i in 1:nplot)
+    {
+      
+      Obj.radar.plot(obj = proj$Objectives[i][[1]],
+                     main=paste("Obj:",proj$Summary_All$Objectives$name_objective[i]),
+                     col=col[i],limited=limited,plot.ref = plot.ref,transp = transp,vlcex = cex.lab)
+    }
+    par(mfrow=c(1,1),mar=c(5.1,4.1,4.1,2.1))
+  }
+}
+
 #' Objective radar diagram
+#' 
 #' @description draw a radar diagram with variables scores of one objective after \code{\link{ASPIRE_all}}
 #'
 #' @param objective_name an objective name
@@ -1036,12 +1077,98 @@ Obj.barplot.all<-function(objective_name,project_all,plot.ref=TRUE,ylim=NULL,
 #'
 #' @details The function uses the function \code{\link{radarchart}} from the package \code{\link{fmsb}} Minato Nakazawa (2014). fmsb: Functions for medical statistics book with some demographic data. R package version 0.7.0.
 #'
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Obj.radar.plot.all(objective_name = "Functioning",project_all = Proj_all)
+#' Obj.radar.plot.all(objective_name = "Functioning",project_all = Proj_all,
+#'                    limited = FALSE,transp = 0.1,col = "c6",main = "Birds",plot.ref = FALSE)
 Obj.radar.plot.all<-function(objective_name,project_all,limited=TRUE,transp=0.5,
                              col="c7",main="Variables scores",plot.ref=TRUE,...)
 {
   objective_all <- project_all$Objectives[names(project_all$Objectives)==objective_name][[1]]
   Obj.radar.plot(obj = objective_all, limited = limited,transp = transp,
                  col = col, main = main, plot.ref = plot.ref, ...)
+}
+
+#' Score wheel
+#'
+#' @description Draw a score wheel inspired from the recovery wheel of SER Standards (McDonald et al., 2016)
+#'
+#' @param lowercat A vector of scores labels
+#' @param supercat A vector of categories labels
+#' @param scores A numeric vector of scores
+#' @param col.score The color of achieved scores
+#' @param col.null The color of unachievde scores
+#' @param col.lines The color of lines and circles
+#' @param col.border The color of the border containing categories labels
+#' @param cex.sup An expansion factor for categories labels
+#' @param cex.low An expansion factor for scores labels
+#' @param val.max theoretical score maximum value (5 by defaut)
+#' @param col.sup text color for categories labels
+#' @param col.low text color for scores labels
+#' 
+#' @details uses function from plotrix package Lemon, J. (2006) Plotrix: a package in the red light district of R. R-News, 6(4): 8-12.
+#' 
+#' @export
+#' @import plotrix
+#' 
+#' @examples # data to draw the same scores as in McDonald et al., 2016
+#' sousTcat<-c("Spatial mosaic","All trophic levels","All strata present",
+#' "No undesirable species","Desirable animals","Desirable plants",
+#' "Water chemo-physical","Substrate chemical","Substrate physical",
+#' "Contamination","Invasive species","Over-utilization",
+#' "Habitat links","Gene flows","Landscape flows",
+#' "Resilience/recruitment","Habitat & interactions","Productivity/cycling")
+#' superTcat<-c(rep(c("STRUCTURAL DIVERSITY","SPECIES COMPOSITION", "PHYSICAL CONDITIONS", 
+#' "ABSENCE OF THREATS", "EXTERNAL EXCHANGES", "ECOSYSTEM FUNCTION"),each=3))
+#' scoTres<-c(2,2,3,4,2,4,4,4,4,5,3,5,3,2,2,0,2,2)
+#' 
+#' Wheelscores(lowercat = sousTcat,supercat = superTcat, scores = scoTres, col.lines = "cadetblue4",col.score = "darkolivegreen2",
+#' col.border = "gray97",cex.sup = 1.2,cex.low = 0.6)
+Wheelscores<-function(lowercat,supercat,scores,col.score='#a1d99b',col.null='white',
+                      col.lines="black",col.border='grey',cex.sup=1,cex.low=0.7,val.max=5,
+                      col.low = 1, col.sup = 1)
+{
+  pie(1, radius=1, init.angle=90, col=col.border, border = NA, labels='')
+  
+  col.score<-col.score
+  col.null<-col.null
+  
+  scores <- sapply(scores,function(x) ifelse(x>val.max,val.max,x))
+  scores <- scores*5/val.max
+  
+  soscores<-sort(unique(scores),decreasing = TRUE)
+  for(i in 1:length(soscores))
+  {
+    col_cir<-ifelse(scores>=soscores[i],col.score,col.null)
+    floating.pie(0,0,rep(c(1),length(scores)),radius=soscores[i]/6, startpos=0, col=as.character(col_cir),border=NA)
+  }
+  
+  for(i in 1:6)
+  {
+    lwdcir<-ifelse(i>=5, 2, 1)
+    draw.circle(0,0,i/6,border = col.lines, lwd = lwdcir)
+  }
+  
+  nb_cat<-length(lowercat)
+  for(i in 1:nb_cat){
+    segments(x0 = 0,y0=0,x1 = 5/6*cos(i*pi/(nb_cat/2)), y1 = 5/6*sin(i*pi/(nb_cat/2)),col = col.lines)
+    rot<-ifelse(i>=(nb_cat/4) & i<3*(nb_cat/4), 180, 0)
+    text(x= 0.5*cos((i-0.5)*pi/(nb_cat/2)), y= 0.5*sin((i-0.5)*pi/(nb_cat/2)),
+         labels = lowercat[i], srt=rot+180/pi*(i-0.5)*pi/(nb_cat/2),cex = cex.low, col = col.low)
+  }
+  
+  largsupercat<-as.vector(tapply(supercat,factor(supercat,levels=unique(supercat)),length))
+  angline<-0
+  for(i in 1:length(largsupercat)){
+    angline<-angline+largsupercat[i]
+    segments(x0 = 0,y0=0,x1 = cos(angline*pi/(nb_cat/2)), y1 = sin(angline*pi/(nb_cat/2)),
+             lwd = 2,col=col.lines)
+    angtext<-angline-(largsupercat[i]/2)
+    arctext(x = as.character(unique(supercat)[i]), center = c(0, 0), radius = 5.5/6,col = col.sup, 
+            middle = angtext*pi/(nb_cat/2),cex=cex.sup,clockwise = ifelse(angtext>(nb_cat/2),FALSE,TRUE))
+  }
 }
 
 #' Score wheel
@@ -1063,6 +1190,13 @@ Obj.radar.plot.all<-function(objective_name,project_all,limited=TRUE,transp=0.5,
 #' @export
 #' @import plotrix
 #' 
+#' @examples # ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+#' # creation of an ASPIRE_all object:
+#' Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+#' Wheelscores.all(project_all = Proj_all)
+#' Wheelscores.all(project_all = Proj_all, col.score = "cadetblue",
+#'                 col.null = 1,col.lines = "green4",col.border = "firebrick",
+#'                 cex.sup = 1.1, cex.low = 0.8, col.low = "white", col.sup = "grey95")
 Wheelscores.all<-function(project_all,col.score='#FDC919',col.null='white',
                           col.lines="grey90",col.border='#FFEEC3',cex.sup=1,cex.low=0.7,
                           col.low = 1, col.sup = 1)

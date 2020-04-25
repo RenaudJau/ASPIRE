@@ -29,3 +29,15 @@ Var.barplot(
 \description{
 barplot of variable mean value or score
 }
+\examples{
+# ASPIRE.var is a data.frame included in the ASPIRE package
+Var1 <- Variable(values = ASPIRE.var$Div_Butterflies,
+                 ref = ASPIRE.var$Div_Butterflies_Ref,
+                 utility = "continuous")
+Var.barplot(variab = Var1)
+Var.barplot(variab = Var1, plot.ref = FALSE, 
+            ylim = c(0,25),transf = TRUE, col = "cadetblue")
+}
+\seealso{
+\code{\link{Var.barplot.all}}
+}

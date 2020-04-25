@@ -2,7 +2,7 @@
 % Please edit documentation in R/ASPIRE_functions.R
 \name{Proj.stak.barplot}
 \alias{Proj.stak.barplot}
-\title{Proj.stak.barplot}
+\title{Stakeholder scores barplot}
 \usage{
 Proj.stak.barplot(proj, ylim = NULL, las.x = 1, cex.x = 1, ...)
 }
@@ -19,4 +19,11 @@ Proj.stak.barplot(proj, ylim = NULL, las.x = 1, cex.x = 1, ...)
 }
 \description{
 displays a barplot of stakeholders project scores
+}
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Proj.stak.barplot(proj = Proj_all)
+Proj.stak.barplot(proj = Proj_all, ylim = c(0,2), las.x = 2, cex.x = 0.8)
 }

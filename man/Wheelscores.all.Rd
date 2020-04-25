@@ -41,3 +41,12 @@ Draw a score wheel inspired from the recovery wheel of SER Standards (McDonald e
 \details{
 uses function from plotrix package Lemon, J. (2006) Plotrix: a package in the red light district of R. R-News, 6(4): 8-12.
 }
+\examples{
+# ASPIRE.var, ASPIRE.obj and ASPIRE.proj are data.frame included in the ASPIRE package
+# creation of an ASPIRE_all object:
+Proj_all <- ASPIRE_all(variable_df = ASPIRE.var,objective_df = ASPIRE.obj,project_df = ASPIRE.proj)
+Wheelscores.all(project_all = Proj_all)
+Wheelscores.all(project_all = Proj_all, col.score = "cadetblue",
+                col.null = 1,col.lines = "green4",col.border = "firebrick",
+                cex.sup = 1.1, cex.low = 0.8, col.low = "white", col.sup = "grey95")
+}
