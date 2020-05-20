@@ -91,18 +91,18 @@ server <- shinyServer(function(input,output){
   })
   
   output$Liste_variables <- renderUI({
-    selectInput("Liste", "selection variables", choices = as.character(projet()$Summary_All$Variables$name_var))
+    selectInput("Liste", "Sélection de la variable", choices = as.character(projet()$Summary_All$Variables$name_var))
   })
   
   output$Liste_variables_ref <- renderUI({
     selectInput("Liste_variables_ref",
-                "est-ce qu’on trace la valeur de la référence ou pas", c("oui" = "TRUE",
+                "Tracer la référence ?", c("oui" = "TRUE",
                                                                          "non" = "FALSE"))
   })
   
   output$Liste_variables_transf <- renderUI({
     selectInput("Liste_variables_transf",
-                "est-ce que ce sont les valeurs transformées ou brutes ?", c("oui" = "TRUE",
+                "Transformer les valeurs ?", c("oui" = "TRUE",
                                                                              "non" = "FALSE"))
   })
   output$Plot_variables <- renderPlot({
@@ -110,20 +110,20 @@ server <- shinyServer(function(input,output){
     Var.barplot.all(variable_name = input$Liste,project_all = projet(),
                     plot.ref = input$Liste_variables_ref,
                     transf = input$Liste_variables_transf)
-  })
+  }, width = 200, height = 500, execOnResize = TRUE)
   
   
   output$Liste_objectifs <- renderUI({
-    selectInput("Liste_o", "selection objectifs",
+    selectInput("Liste_o", "Sélection objectif",
                 choices = as.character(projet()$Summary_All$Objectives$name_objective))
   })
   
   output$Liste_objectifs_graphique <- renderUI({
-    selectInput("Liste_obj_graphique", "quel graphique ?", c("Barre" = "barre","Radar" = "radar"))
+    selectInput("Liste_obj_graphique", "Quel graphique ?", c("Barre" = "barre","Radar" = "radar"))
   })
   
   output$Liste_objectifs_plot_ref <- renderUI({
-    selectInput("Liste_objectifs_plot_ref", "Plot ref ?", c("oui" = "TRUE","non" = "FALSE"))
+    selectInput("Liste_objectifs_plot_ref", "Tracer la référence ?", c("oui" = "TRUE","non" = "FALSE"))
   })
   
   output$Plot_objectifs <- renderPlot({
@@ -131,51 +131,51 @@ server <- shinyServer(function(input,output){
     if (input$Liste_obj_graphique=="barre"){
       Obj.barplot.all(objective_name = input$Liste_o,
                       project_all = projet(),plot.ref = input$Liste_objectifs_plot_ref,
-                      las.x = 2, cex.x = 0.8)
+                      las.x = 2, cex.x = 1)
     }
     else{
       Obj.radar.plot.all(objective_name = input$Liste_o,
-                         project_all = projet(),plot.ref = input$Liste_objectifs_plot_ref)		
+                         project_all = projet(),plot.ref = input$Liste_objectifs_plot_ref,main = "Scores des variables")		
     }
-  })
+  }, width = 500, height = 500, execOnResize = TRUE)
   
   
   
   output$Plot_radar_objectifs <- renderPlot({
     Obj.radar.plot.all(objective_name = input$Liste_o,
                        project_all = projet(),plot.ref = input$Liste_objectifs_plot_ref)	
-  })
+  }, width = 500, height = 500, execOnResize = TRUE)
   
   output$Liste_projet_graphique <- renderUI({
-    selectInput("Liste_projet_graphique", "quel graphique ?", c("Barre" = "barre","Radar" = "radar"))
+    selectInput("Liste_projet_graphique", "Quel graphique ?", c("Barre" = "barre","Radar" = "radar"))
   })
   
   output$Plot_projet <- renderPlot({
     # Render a barplot
     if (input$Liste_projet_graphique=="barre"){
-      Proj.complete.barplot(proj = projet(),las.x = 2,cex.x = 0.8)
+      Proj.complete.barplot(proj = projet(),las.x = 2,cex.x = 1)
     }
     else{
       Proj.all.radar.plot(proj = projet())
     }
-  })
+  }, width = 500, height = 700, execOnResize = TRUE)
   
   output$Plot_radar_projet <- renderPlot({
     
     Proj.all.radar.plot(proj = projet())
-  })
+  }, width = 500, height = 500, execOnResize = TRUE)
   
   output$Plot_projet_acteur <- renderPlot({
     #data1()
     Proj.stak.barplot(proj = projet())
     
-  })
+  }, width = 500, height = 500, execOnResize = TRUE)
   
   output$Plot_projet_recov <- renderPlot({
     #data1()
-    Wheelscores.all(project_all = projet())
+    Wheelscores.all(project_all = projet(), cex.sup = 1.2, cex.low = 1)
     
-  })
+  }, width = 500, height = 500, execOnResize = TRUE)
   
   # this reactive output contains the summary of the dataset and display the summary in table format
   output$sum <- renderTable({
@@ -194,30 +194,30 @@ server <- shinyServer(function(input,output){
   # Until the file is loaded, app will not show the tabset.
   output$tb <- renderUI({
     if (is.null(data1()) || is.null(data2()) || is.null(data3())) {
-      h5("Select and upload the 3 files")
+      h5("Sélectionner et télécharger les 3 fichiers")
     }
     else{
       
-      tabsetPanel(tabPanel("Scores calculation",
+      tabsetPanel(tabPanel("Scores globaux",
                            tableOutput("filedf"), 
                            tableOutput("filedf2"),
                            tableOutput("filedf3")),
-                  tabPanel("Variables plots",
+                  tabPanel("Variables",
                            tableOutput("Liste_variables"),
                            tableOutput("Liste_variables_ref"),
                            tableOutput("Liste_variables_transf"),
                            plotOutput("Plot_variables")),
-                  tabPanel("Objectives plots",
+                  tabPanel("Objectifs",
                            tableOutput("Liste_objectifs"),
                            tableOutput("Liste_objectifs_graphique"),
                            tableOutput("Liste_objectifs_plot_ref"),
                            plotOutput("Plot_objectifs")),
-                  tabPanel("Project plots",
+                  tabPanel("Projet",
                            tableOutput("Liste_projet_graphique"),
                            plotOutput("Plot_projet")),
-                  tabPanel("Stakeholders plots",
+                  tabPanel("Acteurs",
                            plotOutput("Plot_projet_acteur")),
-                  tabPanel("Recovery wheel",
+                  tabPanel("Roue du rétablissement",
                            plotOutput("Plot_projet_recov")))
       
     }
@@ -229,26 +229,26 @@ server <- shinyServer(function(input,output){
 ## --------------------- User interface  ------------------------------------
 
 ui <- shinyUI(fluidPage(
-  img(src='logo.png', height="100", width="100",align = "right"),
-  titlePanel("ASPIRE assessment"),
+  img(src='https://raw.githubusercontent.com/RenaudJau/ASPIRE/master/Logo-INRAE_Web200.jpg', height="50", width="200",align = "right"),
+  titlePanel("Evaluation ASPIRE"),
   tags$div(checked = NA,
-           tags$a(href = "Exemple_Utilisation_ASPIRE.pdf", target="_blank","Notice d'utilisation")
+           tags$a(href = "https://raw.githubusercontent.com/RenaudJau/ASPIRE/master/Exemple_Utilisation_ASPIRE.pdf", target="_blank","Notice d'utilisation")
   ),
   sidebarLayout(
     
     sidebarPanel(
-      tags$a(href = "ASPIRE_tab_exemple_Projet.txt", target="_blank","Fichier exemple Projet"),
-      fileInput('file1', 'Choose project file',
+      tags$a(href = "https://raw.githubusercontent.com/RenaudJau/ASPIRE/master/ASPIRE_tab_exemple_Projet.txt", target="_blank","Fichier exemple Projet"),
+      fileInput('file1', 'Sélectionner le fichier projet',
                 accept=c('text/csv', 
                          'text/comma-separated-values,text/plain', 
                          '.csv')),
-      tags$a(href = "ASPIRE_tab_exemple_Objectifs.txt", target="_blank","Fichier exemple Objectifs"),
-      fileInput('file2', 'Choose objectives file',
+      tags$a(href = "https://raw.githubusercontent.com/RenaudJau/ASPIRE/master/ASPIRE_tab_exemple_Objectifs.txt", target="_blank","Fichier exemple Objectifs"),
+      fileInput('file2', 'Sélectionner le fichier objectif',
                 accept=c('text/csv', 
                          'text/comma-separated-values,text/plain', 
                          '.csv')),
-      tags$a(href = "ASPIRE_tab_exemple_Variables.txt", target="_blank","Fichier exemple Variables"),
-      fileInput('file3', 'Choose variables file',
+      tags$a(href = "https://raw.githubusercontent.com/RenaudJau/ASPIRE/master/ASPIRE_tab_exemple_Variables.txt", target="_blank","Fichier exemple Variables"),
+      fileInput('file3', 'Sélectionner le fichier variables',
                 accept=c('text/csv', 
                          'text/comma-separated-values,text/plain', 
                          '.csv'))
