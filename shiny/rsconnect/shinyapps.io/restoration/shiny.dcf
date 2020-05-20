@@ -1,0 +1,10 @@
+name: shiny
+title:
+username:
+account: restoration
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2329785
+bundleId: 3170001
+url: https://restoration.shinyapps.io/shiny/
+when: 1589972172.95834
