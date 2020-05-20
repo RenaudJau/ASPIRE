@@ -1,0 +1,12 @@
+Variables	Utility	Biodiversity	Functioning	Production
+Div_Butterflies	continuous	2	0	0
+Div_Plant	continuous	1	0	0
+Compo_Butterflies	continuous	1	0	0
+Compo_Plant	continuous	2	0	0
+Cover_Plant	hump	0	2	0
+OMDecomposition	threshold	0	2	0
+Soil_Resp	continuous	0	1	0
+Productivity	continuous	0	0	4
+Digestibility	continuous	0	0	3
+Labeling	step	0	0	1
+LengthSeason	continuous	0	0	1

@@ -1,0 +1,4 @@
+Objectives	Naturalist_Asso	Env_Managers	Farmers
+Biodiversity	6	2	1
+Functioning	3	2	1
+Production	1	1	3
